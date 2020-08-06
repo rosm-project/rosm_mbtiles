@@ -20,7 +20,7 @@ pub enum FileFormat {
     Png,
     Webp,
     /// An [IETF media type](https://www.iana.org/assignments/media-types/media-types.xhtml) format.
-    Other(String)
+    Other(String),
 }
 
 impl Into<String> for FileFormat {
@@ -30,7 +30,7 @@ impl Into<String> for FileFormat {
             FileFormat::Jpg => "jpg".to_owned(),
             FileFormat::Png => "png".to_owned(),
             FileFormat::Webp => "webp".to_owned(),
-            FileFormat::Other(ietf_type) => ietf_type
+            FileFormat::Other(ietf_type) => ietf_type,
         }
     }
 }
@@ -68,7 +68,7 @@ impl TryFrom<&str> for Type {
     }
 }
 
-/// A key/value store for settings. 
+/// A key/value store for settings.
 #[derive(Debug, Default)]
 pub struct Metadata {
     /// The human-readable name of the tileset.
@@ -130,5 +130,7 @@ pub struct VectorLayer {
 /// **Note:** attributes with mixed types should be serialized as string.
 #[derive(Debug, Serialize, Deserialize)]
 pub enum FieldType {
-    Number, Boolean, String
+    Number,
+    Boolean,
+    String,
 }

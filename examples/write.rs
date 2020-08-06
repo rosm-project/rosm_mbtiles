@@ -22,7 +22,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     };
 
     let metadata = Metadata {
-        name: "example_tileset".to_owned(), 
+        name: "example_tileset".to_owned(),
         format: FileFormat::Pbf(mvt_metadata),
         ..Default::default()
     };

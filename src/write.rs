@@ -2,7 +2,7 @@
 
 use rosm_geo::mercator::TmsTileId;
 
-use rusqlite::{Transaction, params, NO_PARAMS};
+use rusqlite::{params, Transaction, NO_PARAMS};
 
 use crate::common::{FileFormat, Metadata};
 
@@ -92,7 +92,10 @@ pub fn write_metadata(tr: &Transaction, metadata: Metadata) -> Result<(), Box<dy
     if let Some(bounds) = &metadata.bounds {
         let tl = bounds.top_left();
         let br = bounds.bottom_right();
-        insert_metadata.execute(params!["bounds", format!("{},{},{},{}", tl.lon(), br.lat(), br.lon(), tl.lat())])?;
+        insert_metadata.execute(params![
+            "bounds",
+            format!("{},{},{},{}", tl.lon(), br.lat(), br.lon(), tl.lat())
+        ])?;
     }
 
     if let Some(center) = &metadata.center {
@@ -129,7 +132,8 @@ pub fn write_metadata(tr: &Transaction, metadata: Metadata) -> Result<(), Box<dy
 ///
 /// **Note:** `tile_data` must be GZIP-compressed if Mapbox Vector Tile PBF is being stored.
 pub fn write_tile(tr: &Transaction, tile_id: TmsTileId, tile_data: Vec<u8>) -> rusqlite::Result<()> {
-    let mut insert_tile = tr.prepare_cached("INSERT INTO tiles (zoom_level, tile_column, tile_row, tile_data) VALUES (?1, ?2, ?3, ?4)")?;
+    let mut insert_tile =
+        tr.prepare_cached("INSERT INTO tiles (zoom_level, tile_column, tile_row, tile_data) VALUES (?1, ?2, ?3, ?4)")?;
     insert_tile.execute(params![tile_id.z(), tile_id.x(), tile_id.y(), tile_data])?;
     Ok(())
 }
@@ -138,14 +142,17 @@ pub fn write_tile(tr: &Transaction, tile_id: TmsTileId, tile_data: Vec<u8>) -> r
 ///
 /// **Note:** `grid` must be GZIP-compressed.
 pub fn write_grid(tr: &Transaction, tile_id: TmsTileId, grid: Vec<u8>) -> rusqlite::Result<()> {
-    let mut insert_grid = tr.prepare_cached("INSERT INTO grids (zoom_level, tile_column, tile_row, grid) VALUES (?1, ?2, ?3, ?4)")?;
+    let mut insert_grid =
+        tr.prepare_cached("INSERT INTO grids (zoom_level, tile_column, tile_row, grid) VALUES (?1, ?2, ?3, ?4)")?;
     insert_grid.execute(params![tile_id.z(), tile_id.x(), tile_id.y(), grid])?;
     Ok(())
 }
 
 /// Writes [UTFGrid](https://github.com/mapbox/utfgrid-spec) data for the given tile and key.
 pub fn write_grid_data(tr: &Transaction, tile_id: TmsTileId, key: &str, data: &str) -> rusqlite::Result<()> {
-    let mut insert_grid_data = tr.prepare_cached("INSERT INTO grid_data (zoom_level, tile_column, tile_row, key_name, key_json) VALUES (?1, ?2, ?3, ?4, ?5)")?;
+    let mut insert_grid_data = tr.prepare_cached(
+        "INSERT INTO grid_data (zoom_level, tile_column, tile_row, key_name, key_json) VALUES (?1, ?2, ?3, ?4, ?5)",
+    )?;
     insert_grid_data.execute(params![tile_id.z(), tile_id.x(), tile_id.y(), key, data])?;
     Ok(())
 }
