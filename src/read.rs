@@ -4,7 +4,7 @@ use rosm_geo::coord::GeoCoord;
 use rosm_geo::mercator::TmsTileId;
 use rosm_geo::rect::GeoRect;
 
-use rusqlite::{params, NO_PARAMS};
+use rusqlite::params;
 
 use std::convert::TryFrom;
 
@@ -13,7 +13,7 @@ use crate::common::{FileFormat, Metadata, MvtMetadata, Type};
 /// Reads metadata from the given database.
 pub fn read_metadata(conn: &rusqlite::Connection) -> Result<Metadata, Box<dyn std::error::Error>> {
     let mut select_metadata = conn.prepare_cached("SELECT name, value FROM metadata")?;
-    let mut rows = select_metadata.query(NO_PARAMS)?;
+    let mut rows = select_metadata.query([])?;
 
     let mut metadata = Metadata::default();
 

@@ -2,7 +2,7 @@
 
 use rosm_geo::mercator::TmsTileId;
 
-use rusqlite::{params, Transaction, NO_PARAMS};
+use rusqlite::{params, Transaction};
 
 use crate::common::{FileFormat, Metadata};
 
@@ -13,7 +13,7 @@ pub fn create_metadata_table(tr: &Transaction) -> rusqlite::Result<()> {
             name TEXT,
             value TEXT
         )",
-        NO_PARAMS,
+        [],
     )?;
     Ok(())
 }
@@ -27,7 +27,7 @@ pub fn create_tiles_table(tr: &Transaction) -> rusqlite::Result<()> {
             tile_row INTEGER,
             tile_data BLOB
         )",
-        NO_PARAMS,
+        [],
     )?;
     Ok(())
 }
@@ -41,7 +41,7 @@ pub fn create_grid_tables(tr: &Transaction) -> rusqlite::Result<()> {
             tile_row INTEGER,
             grid BLOB
         )",
-        NO_PARAMS,
+        [],
     )?;
     tr.execute(
         "CREATE TABLE grid_data (
@@ -51,7 +51,7 @@ pub fn create_grid_tables(tr: &Transaction) -> rusqlite::Result<()> {
             key_name TEXT,
             key_json TEXT
         )",
-        NO_PARAMS,
+        [],
     )?;
     Ok(())
 }
@@ -64,7 +64,7 @@ pub fn create_tile_index(tr: &Transaction) -> rusqlite::Result<()> {
             tile_column, 
             tile_row
         )",
-        NO_PARAMS,
+        [],
     )?;
     Ok(())
 }
@@ -72,7 +72,7 @@ pub fn create_tile_index(tr: &Transaction) -> rusqlite::Result<()> {
 /// Sets the officially assigned MBTiles magic number as application ID for the database.
 pub fn set_application_id(tr: &Transaction) -> rusqlite::Result<()> {
     const MBTILES_ID: i32 = 0x4d504258;
-    tr.execute(format!("PRAGMA application_id = {}", MBTILES_ID).as_str(), NO_PARAMS)?;
+    tr.execute(format!("PRAGMA application_id = {}", MBTILES_ID).as_str(), [])?;
     Ok(())
 }
 

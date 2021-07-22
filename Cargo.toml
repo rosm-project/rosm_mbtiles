@@ -7,6 +7,6 @@ edition = "2018"
 [dependencies]
 rosm_geo = { git = "https://github.com/rosm-project/rosm_geo.git" }
 rosm_geostats = { git = "https://github.com/rosm-project/rosm_geostats.git" }
-rusqlite = { version = "0.23", features = ["bundled"] }
+rusqlite = { version = "0.25", features = ["bundled"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
